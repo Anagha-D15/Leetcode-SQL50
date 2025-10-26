@@ -1,9 +1,9 @@
-WITH report_count AS(
-    SELECT managerId
-    FROM Employee
-    Group by managerId
-    HAVING count(id) >= 5
-)
-SELECT name
-FROM Employee
-WHERE id IN (SELECT managerId FROM report_count)
+SELECT e1.name
+FROM Employee e1 INNER JOIN Employee e2
+ON e1.id=e2.managerId
+GROUP BY e1.id
+HAVING count(e2.managerID) > 4
+
+
+
+
