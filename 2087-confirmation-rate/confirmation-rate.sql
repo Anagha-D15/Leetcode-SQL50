@@ -1,10 +1,13 @@
 # Write y ur MySQL query statement below
-
-
-WITH r1 as (SELECT s.user_id, c.action
-FROM Signups s LEFT JOIN Confirmations c
-ON s.user_id = c.user_id)
-
-SELECT user_id,ROUND( AVG(IF(action = 'timeout'or action is NULL,0,1)),2)  AS confirmation_rate
-FROM r1
+SELECT user_id,  round(avg(if(action = 'confirmed',1,0)),2) AS confirmation_rate
+FROM Confirmations 
 GROUP BY user_id
+
+UNION
+SELECT user_id, 0 AS confirmation_rate
+FROM Signups
+WHERE user_id
+NOT IN 
+(SELECT DISTINCT user_id FROM ConfirmationS)
+
+
